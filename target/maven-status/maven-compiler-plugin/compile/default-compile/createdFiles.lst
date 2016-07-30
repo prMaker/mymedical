@@ -1,4 +1,6 @@
 com\kaishengit\util\ServletUtil.class
+com\kaishengit\exception\NotFountException.class
+com\kaishengit\dto\DataTablesResult.class
 com\kaishengit\dto\JSONResult.class
 com\kaishengit\util\Page.class
 com\kaishengit\dao\MedicalTypeDao.class

@@ -23,15 +23,13 @@ public class Patient implements Serializable {
     private String sex;
     private String tel;
     private String address;
-//    TODO 拼音生成
     private String pinyin;
     private String state;
     private Timestamp createtime;
-
-//    TODO IDcard判断
     private String idcard;
-//    TODO 年龄自动生成
     private Integer age;
+    private String allergichistory;
+    private String remarks;
 
     @ManyToOne
     @JoinColumn(name = "medicaltypeid")
@@ -44,6 +42,22 @@ public class Patient implements Serializable {
     }
 
     public Patient() {
+    }
+
+    public String getAllergichistory() {
+        return allergichistory;
+    }
+
+    public void setAllergichistory(String allergichistory) {
+        this.allergichistory = allergichistory;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 
     public Integer getId() {
@@ -132,5 +146,22 @@ public class Patient implements Serializable {
 
     public void setMedicalType(MedicalType medicalType) {
         this.medicalType = medicalType;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient{" +
+                "id=" + id +
+                ", patientname='" + patientname + '\'' +
+                ", sex='" + sex + '\'' +
+                ", tel='" + tel + '\'' +
+                ", address='" + address + '\'' +
+                ", pinyin='" + pinyin + '\'' +
+                ", state='" + state + '\'' +
+                ", createtime=" + createtime +
+                ", idcard='" + idcard + '\'' +
+                ", age=" + age +
+                ", medicalType=" + medicalType +
+                '}';
     }
 }

@@ -33,60 +33,62 @@
                 <div class="box-body form">
 
                     <form id="saveForm">
+                        <input type="hidden" value="${patient.id}" name="id">
+                        <input type="hidden" value="${patient.state}" name="state">
                         <div class="form-group">
                             <label>姓名</label>
-                            <input style="border: 2px #565171 solid; padding: 15px" type="text" name="patientname" class="form-control">
+                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.patientname}" name="patientname" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>性别</label>
                             <div class="" style="border: 2px #565171 solid; padding: 15px">
                                 <select id="" name="sex" class="form-control">
-                                    <option value="男">男</option>
-                                    <option value="女">女</option>
+                                    <option ${patient.sex=="男" ? "selected" : ""} value="男">男</option>
+                                    <option ${patient.sex=="女" ? "selected" : ""} value="女">女</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>身份证号</label>
-                            <input style="border: 2px #565171 solid; padding: 15px" type="text" id="idcard" name="idcard" class="form-control">
+                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.idcard}" id="idcard" name="idcard" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>年龄</label>
-                            <input style="border: 2px #565171 solid; padding: 15px" type="text" id="age" name="age" class="form-control">
+                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.age}" id="age" name="age" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>电话</label>
-                            <input style="border: 2px #565171 solid; padding: 15px" type="text" name="tel" class="form-control input-group-sm">
+                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.tel}" name="tel" class="form-control input-group-sm">
                         </div>
                         <div class="form-group">
                             <label>医保类型</label>
                             <div class="" style="border: 2px #565171 solid; padding: 15px">
                                 <select id="yb" name="medicalType.id" style="display: block">
                                     <c:forEach items="${medicalTypeList}" var="medicaltype">
-                                        <option value="${medicaltype.id}">${medicaltype.medicalensuretype}</option>
+                                        <option ${patient.medicalType.id == medicaltype.id ? "selected" : ""} value="${medicaltype.id}">${medicaltype.medicalensuretype}</option>
                                     </c:forEach>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>住址</label>
-                            <input style="border: 2px #565171 solid; padding: 15px" type="text" name="address" class="form-control">
+                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.address}" name="address" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>过敏史</label>
-                            <div class="" style="border: 2px #565171 solid; padding: 15px">
-                                <textarea name="allergichistory" id="allergichistory"  class="editor1 form-control" style="height:50px"></textarea>
+                            <div class=""  style="border: 2px #565171 solid;">
+                                <textarea name="allergichistory" style="border: 2px #565171 solid;" id="allergichistory"  class="editor1 form-control" style="height:50px"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>备注</label>
-                            <div class="" style="border: 2px #565171 solid; padding: 15px">
-                                <textarea name="remarks" id="remarks" class="editor2 form-control"></textarea>
+                            <div class=""  style="border: 2px #565171 solid;">
+                                <textarea name="remarks" style="border: 2px #565171 solid;" id="remarks" class="editor2 form-control"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="form-actions">
-                                <button id="saveBtn" class="button button-flat-action button-pill">保存</button>
+                                <button type="button" id="saveBtn" class="button button-flat-action button-pill">保存</button>
                             </div>
                         </div>
                     </form>
@@ -107,6 +109,9 @@
 
 <script>
     $(function(){
+
+        $("#allergichistory").text("${patient.allergichistory}");
+        $("#remarks").text("${patient.remarks}");
 
 //      表单验证
         $("#saveForm").validate({
@@ -143,9 +148,9 @@
                 allergichistory:"请输入过敏史"
             },
             submitHandler:function (form) {
-                $.post("/patient/new",$(form).serialize()).done(function (result) {
-                    if(result.state == "success"){
-                        window.location.href="/patient";
+                $.post("/patient/edit/${patient.id}",$(form).serialize()).done(function (result) {
+                    if(result == "success"){
+                        window.location.href="/patient/${patient.id}";
                     }
                 }).fail(function () {
                     alert("请求服务器异常");
@@ -159,6 +164,7 @@
 //        动态获取年龄
         $("#idcard").blur(function () {
             $(this).change(function () {
+                console.log($(this).val());
                 var idcard = $(this).val();
                 if(idcard.length == 18){
                     $.get("/patient/idcard/"+idcard).done(function (result) {
@@ -186,7 +192,6 @@
             placeholder: "请选择医保类型",
             width:'220px'
         });
-
 
 
 

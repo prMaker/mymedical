@@ -23,10 +23,6 @@ public class JSONResult{
     public JSONResult() {
     }
 
-    public JSONResult(String state) {
-        this.state = state;
-    }
-
     public JSONResult(Object data) {
         this.state = DTO_STATE_SUCCESS;
         this.data = data;

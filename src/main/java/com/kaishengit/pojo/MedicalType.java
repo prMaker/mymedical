@@ -36,4 +36,12 @@ public class MedicalType {
     public void setMedicalensuretype(String medicalensuretype) {
         this.medicalensuretype = medicalensuretype;
     }
+
+    @Override
+    public String toString() {
+        return "MedicalType{" +
+                "id=" + id +
+                ", medicalensuretype='" + medicalensuretype + '\'' +
+                '}';
+    }
 }

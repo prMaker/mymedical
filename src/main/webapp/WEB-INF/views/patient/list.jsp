@@ -1,3 +1,5 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html lang="en">
@@ -7,6 +9,8 @@
     <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.1.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="/static/medical/css/style.css">
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/plugins/datatables/css/dataTables.bootstrap.min.css">
 </head>
 <body>
 <jsp:include page="../include/nav.jsp">
@@ -25,11 +29,11 @@
                     <span class="title">搜索</span>
                 </div>
                 <div class="box-body search-box">
-                    <form action="" class="form-search">
-                        <input type="text" placeholder="姓名">
-                        <input type="text" placeholder="身份证号">
-                        <input type="text" placeholder="电话">
-                        <button class="button button-flat-primary button-pill"><i class="fa fa-search"></i> 搜索</button>
+                    <form class="form-search" id="searchForm">
+                        <input type="text" style="border: 2px blueviolet dashed; padding: 15px" placeholder="姓名" id="search_patientname" name="search_patientname">
+                        <input type="text" style="border: 2px blueviolet dashed; padding: 15px" placeholder="身份证号" id="search_idcard" name="search_idcard">
+                        <input type="text" style="border: 2px blueviolet dashed; padding: 15px" placeholder="电话" id="search_tel" name="search_tel">
+                        <button id="searchBtn" type="button" class="button button-flat-primary button-pill"><i class="fa fa-search"></i> 搜索</button>
                     </form>
                 </div>
             </div>
@@ -44,30 +48,30 @@
                         <li><a href="/patient/new"><i class="fa fa-plus"></i> 新建</a></li>
                     </ul>
                 </div>
-                <div class="box-body">
-                    <table class="table" id="patientList">
-                        <thead>
-                            <tr>
-                                <th width="20">
-                                    <input type="checkbox" name="" id="">
-                                </th>
-                                <th width="100">姓名</th>
-                                <th width="50">性别</th>
-                                <th width="150">电话</th>
-                                <th width="200">医保类型</th>
-                                <th>地址</th>
-                                <th width="50">状态</th>
-                                <th width="100">创建日期</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div class="box box-body">
+                    <div class="container">
+                        <table class="table" id="dataTable" style="margin: 50px">
+                            <thead>
+                                <tr>
+                                    <th width="50">选中</th>
+                                    <th width="150">姓名</th>
+                                    <th width="50">性别</th>
+                                    <th width="200">电话</th>
+                                    <th width="100">医保类型</th>
+                                    <th width="200">地址</th>
+                                    <th width="100">状态</th>
+                                    <th width="150">创建日期</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
+</div>
     </div>
 
 
@@ -75,6 +79,10 @@
 
 <script src="http://cdn.staticfile.org/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="/static/plugins/datatables/js/jquery.dataTables.min.js"></script>
+<script src="/static/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
+<script src="/static/plugins/moment/moment.min.js"></script>
+<script src="/static"></script>
 
 <script>
 
@@ -85,35 +93,31 @@
             searching:false,
             serverSide:true,
             ajax:{
-                url:"/sales/load",
+                url:"/patient/dataload",
                 data:function(dataSouce){
-                    dataSouce.name = $("#search_name").val();
-                    dataSouce.progress = $("#search_progress").val();
-                    dataSouce.startdate = $("#search_start_time").val();
-                    dataSouce.enddate = $("#search_end_time").val();
+                    dataSouce.patientname = $("#search_patientname").val();
+                    dataSouce.idcard = $("#search_idcard").val();
+                    dataSouce.tel = $("#search_tel").val();
                 }
             },
             columns:[
-                {"data":function(row){
-                    return "<a href='/sales/"+row.id+"'>"+row.name+"</a>";
+//                {"data":"id"},
+                {"data": function (row) {
+                    return '<input type="checkbox" class="checked">';
                 }},
-                {"data":function(row){
-                    return "<a href='/customer/"+row.custid+"'>"+row.custname+"</a>";
+                {"data": function (row) {
+                    return "<a href='/patient/"+row.id+"' >"+row.patientname+"</a>";
                 }},
-                {"data":function(row){
-                    return "￥" + row.price;
+                {"data":"sex"},
+                {"data":"tel"},
+                {"data": function (row) {
+                    return row.medicalType.medicalensuretype;
                 }},
-                {"data":function(row) {
-                    if(row.progress == '完成交易') {
-                        return "<span class='label label-success'>"+row.progress+"</span>";
-                    }
-                    if(row.progress == '交易搁置') {
-                        return "<span class='label label-danger'>"+row.progress+"</span>";
-                    }
-                    return row.progress;
-                }},
-                {"data":"lasttime"},
-                {"data":"username"}
+                {"data":"address"},
+                {"data":"state"},
+                {"data": function (row) {
+                    return moment(row.createtime).format("YYYY-MM-DD");
+                }}
             ],
             ordering:false,
             "autoWidth": false,
@@ -134,6 +138,9 @@
             }
         });
 
+        $("#searchBtn").click(function () {
+            dataTable.ajax.reload();
+        });
 
     });
 
