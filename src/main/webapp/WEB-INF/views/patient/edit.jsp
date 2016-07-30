@@ -37,11 +37,13 @@
                         <input type="hidden" value="${patient.state}" name="state">
                         <div class="form-group">
                             <label>姓名</label>
-                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.patientname}" name="patientname" class="form-control">
+                            <div style="width: 30%">
+                                <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.patientname}" name="patientname" class="form-control">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>性别</label>
-                            <div class="" style="border: 2px #565171 solid; padding: 15px">
+                            <div class="" style="border: 2px #565171 solid; padding: 15px;width: 30%">
                                 <select id="" name="sex" class="form-control">
                                     <option ${patient.sex=="男" ? "selected" : ""} value="男">男</option>
                                     <option ${patient.sex=="女" ? "selected" : ""} value="女">女</option>
@@ -50,19 +52,25 @@
                         </div>
                         <div class="form-group">
                             <label>身份证号</label>
-                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.idcard}" id="idcard" name="idcard" class="form-control">
+                            <div style="width: 30%">
+                                <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.idcard}" id="idcard" name="idcard" class="form-control">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>年龄</label>
-                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.age}" id="age" name="age" class="form-control">
+                            <div style="width: 30%">
+                                <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.age}" id="age" name="age" class="form-control">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>电话</label>
-                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.tel}" name="tel" class="form-control input-group-sm">
+                            <div style="width: 30%">
+                                <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.tel}" name="tel" class="form-control input-group-sm">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>医保类型</label>
-                            <div class="" style="border: 2px #565171 solid; padding: 15px">
+                            <div class="" style="width: 30%;border: 2px #565171 solid; padding: 15px">
                                 <select id="yb" name="medicalType.id" style="display: block">
                                     <c:forEach items="${medicalTypeList}" var="medicaltype">
                                         <option ${patient.medicalType.id == medicaltype.id ? "selected" : ""} value="${medicaltype.id}">${medicaltype.medicalensuretype}</option>
@@ -72,7 +80,9 @@
                         </div>
                         <div class="form-group">
                             <label>住址</label>
-                            <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.address}" name="address" class="form-control">
+                            <div style="width: 30%">
+                                <input type="text" style="border: 2px #565171 solid; padding: 15px" value="${patient.address}" name="address" class="form-control">
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>过敏史</label>
