@@ -46,9 +46,9 @@ public class PatientController {
     }
 
     @RequestMapping(value = "/new",method = RequestMethod.POST)
-    public String savenewPatient(Patient patient){
+    public JSONResult savenewPatient(Patient patient){
         patientService.saveOrUpdate(patient);
-        return "redirect:/patient";
+        return new JSONResult(JSONResult.DTO_STATE_SUCCESS);
     }
 
     @RequestMapping("/idcard/{idcard:\\w+}")

@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/7/30.
  * 为JSON通用文件
- * 含4个构造方法 无参，错误（error，msg），正确（object），正确（List<Object>）
+ * 含4个构造方法 无参，有参 为一状态，错误（error，msg），正确（object），正确（List<Object>）
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JSONResult{
@@ -21,6 +21,10 @@ public class JSONResult{
     private String msg;
 
     public JSONResult() {
+    }
+
+    public JSONResult(String state) {
+        this.state = state;
     }
 
     public JSONResult(Object data) {

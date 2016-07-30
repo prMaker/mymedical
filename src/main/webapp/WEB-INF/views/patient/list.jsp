@@ -45,34 +45,23 @@
                     </ul>
                 </div>
                 <div class="box-body">
-                    <table class="table">
+                    <table class="table" id="patientList">
                         <thead>
-                        <tr>
-                            <th width="20">
-                                <input type="checkbox" name="" id="">
-                            </th>
-                            <th width="100">姓名</th>
-                            <th width="50">性别</th>
-                            <th width="150">电话</th>
-                            <th width="200">医保类型</th>
-                            <th>地址</th>
-                            <th width="50">状态</th>
-                            <th width="100">创建日期</th>
-                        </tr>
+                            <tr>
+                                <th width="20">
+                                    <input type="checkbox" name="" id="">
+                                </th>
+                                <th width="100">姓名</th>
+                                <th width="50">性别</th>
+                                <th width="150">电话</th>
+                                <th width="200">医保类型</th>
+                                <th>地址</th>
+                                <th width="50">状态</th>
+                                <th width="100">创建日期</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>
-                                <input type="checkbox" name="" id="">
-                            </td>
-                            <td><a href="patient.html">张晓明</a></td>
-                            <td>男</td>
-                            <td>13898767098</td>
-                            <td>市职工医保</td>
-                            <td>解放区普希顿小区4号楼</td>
-                            <td>在诊</td>
-                            <td>2014-07-09</td>
-                        </tr>
+
                         </tbody>
                     </table>
                 </div>
@@ -86,6 +75,71 @@
 
 <script src="http://cdn.staticfile.org/jquery/1.11.1/jquery.min.js"></script>
 <script src="http://cdn.staticfile.org/twitter-bootstrap/3.0.0/js/bootstrap.min.js"></script>
+
+<script>
+
+    $(function () {
+
+        //DataTables
+        var dataTable = $("#dataTable").DataTable({
+            searching:false,
+            serverSide:true,
+            ajax:{
+                url:"/sales/load",
+                data:function(dataSouce){
+                    dataSouce.name = $("#search_name").val();
+                    dataSouce.progress = $("#search_progress").val();
+                    dataSouce.startdate = $("#search_start_time").val();
+                    dataSouce.enddate = $("#search_end_time").val();
+                }
+            },
+            columns:[
+                {"data":function(row){
+                    return "<a href='/sales/"+row.id+"'>"+row.name+"</a>";
+                }},
+                {"data":function(row){
+                    return "<a href='/customer/"+row.custid+"'>"+row.custname+"</a>";
+                }},
+                {"data":function(row){
+                    return "￥" + row.price;
+                }},
+                {"data":function(row) {
+                    if(row.progress == '完成交易') {
+                        return "<span class='label label-success'>"+row.progress+"</span>";
+                    }
+                    if(row.progress == '交易搁置') {
+                        return "<span class='label label-danger'>"+row.progress+"</span>";
+                    }
+                    return row.progress;
+                }},
+                {"data":"lasttime"},
+                {"data":"username"}
+            ],
+            ordering:false,
+            "autoWidth": false,
+            "language": { //定义中文
+                "search": "请输入书籍名称:",
+                "zeroRecords": "没有匹配的数据",
+                "lengthMenu": "显示 _MENU_ 条数据",
+                "info": "显示从 _START_ 到 _END_ 条数据 共 _TOTAL_ 条数据",
+                "infoFiltered": "(从 _MAX_ 条数据中过滤得来)",
+                "loadingRecords": "加载中...",
+                "processing": "处理中...",
+                "paginate": {
+                    "first": "首页",
+                    "last": "末页",
+                    "next": "下一页",
+                    "previous": "上一页"
+                }
+            }
+        });
+
+
+    });
+
+</script>
+
+
 
 </body>
 </html>

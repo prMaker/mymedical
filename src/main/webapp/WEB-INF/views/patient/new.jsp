@@ -157,8 +157,8 @@
                 allergichistory:"请输入过敏史"
             },
             submitHandler:function (form) {
-                $.post("/patient/new",$(form).serialize()).done(function (data) {
-                    if(data == "success"){
+                $.post("/patient/new",$(form).serialize()).done(function (result) {
+                    if(result.state == "success"){
                         window.location.href="/patient";
                     }
                 }).fail(function () {
