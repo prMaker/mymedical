@@ -1,4 +1,13 @@
 com\kaishengit\util\ServletUtil.class
-com\kaishengit\controller\HomeController.class
+com\kaishengit\dto\JSONResult.class
 com\kaishengit\util\Page.class
+com\kaishengit\dao\MedicalTypeDao.class
+com\kaishengit\dao\PatientDao.class
+com\kaishengit\controller\HomeController.class
+com\kaishengit\dao\BaseDao.class
+com\kaishengit\serivce\PatientService.class
+com\kaishengit\controller\PatientController.class
 com\kaishengit\util\Strings.class
+com\kaishengit\pojo\MedicalType.class
+com\kaishengit\serivce\MedicalTypeService.class
+com\kaishengit\pojo\Patient.class

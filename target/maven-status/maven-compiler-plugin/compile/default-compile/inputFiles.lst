@@ -1,4 +1,13 @@
-E:\webtest\medical\src\main\java\com\kaishengit\util\Strings.java
-E:\webtest\medical\src\main\java\com\kaishengit\util\Page.java
-E:\webtest\medical\src\main\java\com\kaishengit\controller\HomeController.java
-E:\webtest\medical\src\main\java\com\kaishengit\util\ServletUtil.java
+D:\work\medical\src\main\java\com\kaishengit\pojo\Patient.java
+D:\work\medical\src\main\java\com\kaishengit\controller\HomeController.java
+D:\work\medical\src\main\java\com\kaishengit\dto\JSONResult.java
+D:\work\medical\src\main\java\com\kaishengit\serivce\PatientService.java
+D:\work\medical\src\main\java\com\kaishengit\controller\PatientController.java
+D:\work\medical\src\main\java\com\kaishengit\dao\MedicalTypeDao.java
+D:\work\medical\src\main\java\com\kaishengit\serivce\MedicalTypeService.java
+D:\work\medical\src\main\java\com\kaishengit\pojo\MedicalType.java
+D:\work\medical\src\main\java\com\kaishengit\util\Strings.java
+D:\work\medical\src\main\java\com\kaishengit\dao\BaseDao.java
+D:\work\medical\src\main\java\com\kaishengit\util\Page.java
+D:\work\medical\src\main\java\com\kaishengit\util\ServletUtil.java
+D:\work\medical\src\main\java\com\kaishengit\dao\PatientDao.java
