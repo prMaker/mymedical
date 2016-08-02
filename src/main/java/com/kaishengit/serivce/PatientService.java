@@ -19,6 +19,7 @@ public class PatientService {
 
     @Inject
     private PatientDao patientDao;
+    private Long countByParam;
 
     public List<Patient> findPatientList() {
         return patientDao.findAll();
@@ -32,16 +33,16 @@ public class PatientService {
         patientDao.saveOrUpdate(patient);
     }
 
-    public List<Patient> findPatientByPage(Map<String,Object> params) {
-        return patientDao.findPatientByPage(params);
+    public List<Patient> findPatientByPage(Map<String,Object> numAndParams) {
+        Map<String,Object> result = patientDao.findPatientByPage(numAndParams);
+        countByParam = (Long) result.get("countByParam");
+        return (List<Patient>) result.get("tList");
     }
-
     public Long countAllPatient() {
         return patientDao.countAll();
     }
-
-    public Long countAllByParams(Map<String, Object> params) {
-        return patientDao.countAllByparams(params);
+    public Long countAllByParams() {
+        return countByParam;
     }
 
     public Patient findPatientById(Integer id) {
@@ -59,5 +60,9 @@ public class PatientService {
     public void edit(Patient patient) {
         patient.setPinyin(Strings.toPinyin(patient.getPatientname()));
         patientDao.saveOrUpdate(patient);
+    }
+
+    public Patient findByparam(Map<String, Object> param) {
+        return patientDao.findByParam(param);
     }
 }

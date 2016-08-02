@@ -8,13 +8,15 @@
     <title></title>
     <link rel="stylesheet" href="http://cdn.staticfile.org/twitter-bootstrap/2.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://cdn.staticfile.org/font-awesome/4.1.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/medical/css/style.css">
     <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/plugins/datatables/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="http://cdn.staticfile.org/select2/3.4.8/select2.css">
+    <link rel="stylesheet" href="http://cdn.staticfile.org/select2/3.4.8/select2-bootstrap.css">
+    <link rel="stylesheet" href="/static/medical/css/style.css">
 </head>
 <body>
 <jsp:include page="../include/nav.jsp">
-    <jsp:param name="menu" value="patient"/>
+    <jsp:param name="menu" value="visit"/>
 </jsp:include>
 
 
@@ -31,8 +33,15 @@
                 <div class="box-body search-box">
                     <form class="form-search" id="searchForm">
                         <input type="text" style="border: 2px blueviolet solid; padding: 15px" placeholder="姓名" id="search_patientname" name="search_patientname">
-                        <input type="text" style="border: 2px blueviolet solid; padding: 15px" placeholder="身份证号" id="search_idcard" name="search_idcard">
                         <input type="text" style="border: 2px blueviolet solid; padding: 15px" placeholder="电话" id="search_tel" name="search_tel">
+                        <input type="text" style="border: 2px blueviolet solid; padding: 15px" placeholder="就诊时间" id="rangepicker" name="search_time">
+
+                        <select name="search_state" id="search_state">
+                            <option value=""></option>
+                            <option value="">就诊</option>
+                            <option value="">已出院</option>
+                        </select>
+
                         <button id="searchBtn" type="button" class="button button-flat-primary button-pill"><i class="fa fa-search"></i> 搜索</button>
                     </form>
                 </div>
@@ -45,7 +54,7 @@
                 <div class="box-header">
                     <span class="title"><i class="fa fa-building"></i> 患者列表</span>
                     <ul class="unstyled inline pull-right">
-                        <li><a href="/patient/new"><i class="fa fa-plus"></i> 新建</a></li>
+                        <li><a href="/visit/new"><i class="fa fa-plus"></i> 新建</a></li>
                     </ul>
                 </div>
                 <div class="box box-body">
@@ -56,9 +65,9 @@
                                     <th width="50">选中</th>
                                     <th width="150">姓名</th>
                                     <th width="50">性别</th>
-                                    <th width="200">电话</th>
-                                    <th width="100">医保类型</th>
-                                    <th width="200">地址</th>
+                                    <th width="100">科室</th>
+                                    <th width="150">病种</th>
+                                    <th width="300">初步判断</th>
                                     <th width="100">状态</th>
                                     <th width="150">创建日期</th>
                                 </tr>
@@ -82,10 +91,34 @@
 <script src="/static/plugins/datatables/js/jquery.dataTables.min.js"></script>
 <script src="/static/plugins/datatables/js/dataTables.bootstrap.min.js"></script>
 <script src="/static/plugins/moment/moment.min.js"></script>
+<script src="js/rangepicker/rangepicker.js"></script>
+<script src="http://cdn.staticfile.org/select2/3.4.8/select2.min.js"></script>
 
 <script>
 
     $(function () {
+
+
+
+        $("#rangepicker").daterangepicker(
+                {
+                    ranges: {
+                        '今天': [new Date(), new Date()],
+                        '昨天': [moment().subtract('days', 1), moment().subtract('days', 1)],
+                        '最近7天': [moment().subtract('days', 6), new Date()],
+                        '最近30天': [moment().subtract('days', 29), new Date()],
+                        '本月': [moment().startOf('month'), moment().endOf('month')],
+                        '上一月': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+                    },
+                    opens: 'left',
+                    format:'YYYY/MM/DD'
+                },
+                function(start,end,label){
+                    console.log("start:" + start.format('YYYY-MM-DD'));
+                    console.log("end:" + end.format('YYYY-MM-DD'));
+                }
+
+        );
 
         //DataTables
         var dataTable = $("#dataTable").DataTable({

@@ -26,7 +26,7 @@
                 <div class="box-header">
                     <span class="title">
                       <i class="fa fa-plus"></i>
-                      <a href="patient-list.html"> 患者列表</a>  /  新增患者
+                      <a href="patient-list.html"> 患者列表</a>  /  修改患者
                     </span>
                 </div>
 

@@ -46,4 +46,31 @@ public class DaoTest {
         patientService.delPatientById(900);
     }
 
+    @Test
+    public void ListDataTableTest(){
+        Map<String,Object> numAndParams = Maps.newHashMap();
+        numAndParams.put("start",0);
+        numAndParams.put("length",10);
+        numAndParams.put("patientname",null);
+        numAndParams.put("idcard",null);
+        numAndParams.put("tel",null);
+
+        List<Patient> patientList = patientService.findPatientByPage(numAndParams);
+        Long recordsTotal = patientService.countAllPatient();
+//        TODO 问老师  session中单例
+        Long recordsFiltered = patientService.countAllByParams();
+        for(Patient patient : patientList){
+            System.out.println(patient);
+        }
+    }
+
+    @Test
+    public void findByParam(){
+        Map<String,Object> param = Maps.newHashMap();
+        param.put("patientname","李四");
+
+
+        System.out.println(patientService.findByparam(param));
+    }
+
 }

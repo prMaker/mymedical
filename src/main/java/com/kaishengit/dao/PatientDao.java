@@ -16,18 +16,4 @@ import java.util.Map;
  */
 @Named
 public class PatientDao extends BaseDao<Patient,Integer> {
-
-
-    public Long countAllByparams(Map<String, Object> params) {
-        Criteria criteria = getSession().createCriteria(Patient.class);
-
-        Disjunction disjunction =getDisjunction(params);
-
-        if(disjunction != null){
-            criteria.add(disjunction);
-        }
-
-        criteria.setProjection(Projections.rowCount());
-        return (Long) criteria.uniqueResult();
-    }
 }

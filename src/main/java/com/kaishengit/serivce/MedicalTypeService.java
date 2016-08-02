@@ -21,4 +21,12 @@ public class MedicalTypeService {
     public List<MedicalType> findAllMediclType() {
         return medicalTypeDao.findAll();
     }
+
+    public List<MedicalType> finaALLMedicalType() {
+        return medicalTypeDao.findAll();
+    }
+
+    public void saveOrUpdate(MedicalType medicalType) {
+        medicalTypeDao.saveOrUpdate(medicalType);
+    }
 }

@@ -1,11 +1,13 @@
 package com.kaishengit.dao;
 
+import com.google.common.collect.Maps;
 import com.kaishengit.pojo.Patient;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.*;
+import org.hibernate.transform.ResultTransformer;
 
 import javax.inject.Inject;
 import java.lang.reflect.ParameterizedType;
@@ -37,41 +39,86 @@ public class BaseDao<T,PK> {
         return criteria.list();
     }
 
-    public void saveOrUpdate(Patient patient) {
-        getSession().saveOrUpdate(patient);
+    public void saveOrUpdate(T t) {
+        getSession().saveOrUpdate(t);
     }
 
-    public List<T> findPatientByPage(Map<String,Object> params) {
+    /**
+     * DataTable 数据获取值
+     * @param params 包含Map<> params
+     *               params中含有有start和length(选择包含或不包含)及其他搜索属性值
+     *               key为搜索属性名，value为搜索属性值
+     * @return
+     */
+    public Map<String,Object> findPatientByPage(Map<String,Object> params) {
+        Map<String,Object> resultMap = Maps.newHashMap();
+
         Criteria criteria = getSession().createCriteria(entityClass);
-        criteria.setFirstResult(Integer.valueOf(params.get("start").toString()));
-        criteria.setMaxResults(Integer.valueOf(params.get("length").toString()));
+
+        Object start = null;
+        Object length = null;
+        if(params.containsKey("start") && params.containsKey("length")){
+            start = params.get("start");
+            length = params.get("length");
+            params.remove("start");
+            params.remove("length");
+        }
 
         Disjunction disjunction = getDisjunction(params);
-
         if(disjunction != null){
             criteria.add(disjunction);
         }
 
+        Long countByParam = countAllByparams(criteria);
+
+        if(start != null && length != null){
+            criteria.setFirstResult(Integer.valueOf(start.toString()));
+            criteria.setMaxResults(Integer.valueOf(length.toString()));
+        }
+
         criteria.addOrder(Order.desc("id"));
-        return criteria.list();
+        List<T> tList = criteria.list();
+
+        resultMap.put("tList",tList);
+        resultMap.put("countByParam",countByParam);
+
+        return resultMap;
     }
 
+    /**
+     * datatable构建Junction
+     * @param params
+     * @return
+     */
     protected Disjunction getDisjunction(Map<String, Object> params) {
-        String patientname = params.get("patientname").toString();
-        String idcard = params.get("idcard").toString();
-        String tel = params.get("tel").toString();
+        if(params != null){
+            Disjunction disjunction = Restrictions.disjunction();
+            for(Map.Entry entry : params.entrySet()){
+                if(entry.getValue() != null && StringUtils.isNotEmpty(entry.getValue().toString())){
+                    disjunction.add(Restrictions.like(entry.getKey().toString(),entry.getValue().toString(), MatchMode.ANYWHERE));
+                }
+            }
+            if(disjunction.conditions().iterator().hasNext()){
+                return disjunction;
+            }
+            return null;
+        }
+        return null;
+    }
 
-        Disjunction disjunction = Restrictions.disjunction();
-        if(StringUtils.isNotEmpty(patientname)){
-            disjunction.add(Restrictions.like("patientname",patientname, MatchMode.ANYWHERE));
-        }
-        if(StringUtils.isNotEmpty(idcard)){
-            disjunction.add(Restrictions.like("idcard",idcard,MatchMode.ANYWHERE));
-        }
-        if(StringUtils.isNotEmpty(tel)){
-            disjunction.add(Restrictions.like("tel",tel,MatchMode.ANYWHERE));
-        }
-        return disjunction;
+    /**
+     * DataTable 数据获取搜索数量
+     * @return
+     */
+    public Long countAllByparams(Criteria criteria) {
+        ResultTransformer resultTransformer = criteria.ROOT_ENTITY;
+
+        criteria.setProjection(Projections.rowCount());
+        Long countAllByParams = (Long) criteria.uniqueResult();
+        criteria.setProjection(null);
+
+        criteria.setResultTransformer(resultTransformer);
+        return countAllByParams;
     }
 
     public Long countAll() {
@@ -87,5 +134,13 @@ public class BaseDao<T,PK> {
     public void delById(Integer id) {
         T t = findById(id);
         getSession().delete(t);
+    }
+
+    public T findByParam(Map<String, Object> param) {
+        Criteria criteria = getSession().createCriteria(entityClass);
+        for(Map.Entry entry : param.entrySet()){
+            criteria.add(Restrictions.eq(entry.getKey().toString(),entry.getValue()));
+        }
+        return (T) criteria.uniqueResult();
     }
 }

@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -52,16 +51,17 @@ public class PatientController {
         String idcard = request.getParameter("idcard");
         String tel = request.getParameter("tel");
 
-        Map<String,Object> params = Maps.newHashMap();
-        params.put("patientname",new String(patientname.getBytes("ISO8859-1"),"UTF-8"));
-        params.put("idcard",idcard);
-        params.put("tel",tel);
-        params.put("start",start);
-        params.put("length",length);
+        Map<String,Object> numAndParams = Maps.newHashMap();
+        numAndParams.put("start",start);
+        numAndParams.put("length",length);
+        numAndParams.put("patientname",new String(patientname.getBytes("ISO8859-1"),"UTF-8"));
+        numAndParams.put("idcard",idcard);
+        numAndParams.put("tel",tel);
 
-        List<Patient> patientList = patientService.findPatientByPage(params);
+        List<Patient> patientList = patientService.findPatientByPage(numAndParams);
         Long recordsTotal = patientService.countAllPatient();
-        Long recordsFiltered = patientService.countAllByParams(params);
+//        TODO 问老师  session中单例
+        Long recordsFiltered = patientService.countAllByParams();
 
         return new DataTablesResult<>(draw,patientList,recordsTotal,recordsFiltered);
     }
